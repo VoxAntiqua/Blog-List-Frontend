@@ -1,19 +1,30 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Create = ({ blogs, setBlogs }) => {
+const Create = ({ blogs, setBlogs, setMessage }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
   const handleCreate = async event => {
     event.preventDefault()
-    const newBlog = await blogService.create({
-      title,
-      author,
-      url,
-    })
-    setBlogs([...blogs, newBlog])
+    try {
+      const newBlog = await blogService.create({
+        title,
+        author,
+        url,
+      })
+      setBlogs([...blogs, newBlog])
+      setMessage(`new blog ${newBlog.title} by ${newBlog.author} added`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setMessage('Blog could not be added')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
     setTitle('')
     setAuthor('')
     setUrl('')
