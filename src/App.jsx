@@ -14,6 +14,15 @@ const App = () => {
     blogService.getAll().then(blogs => setBlogs(blogs))
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = async event => {
     event.preventDefault()
 
@@ -22,10 +31,12 @@ const App = () => {
         username,
         password,
       })
+
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
-      console.log(`logged in as ${user.username} with token ${user.token}`)
     } catch (exception) {
       console.log('wrong credentials')
     }

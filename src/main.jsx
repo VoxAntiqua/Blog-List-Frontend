@@ -8,4 +8,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 )
 
-// Time spent: 2 hrs
+// Time spent: 3 hrs
