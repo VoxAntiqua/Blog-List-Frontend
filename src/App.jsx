@@ -31,10 +31,9 @@ const App = () => {
     }
   }
 
-  return (
+  return user === null ? (
     <div>
-      <h2>blogs</h2>
-
+      <h2>log in to application</h2>
       <Login
         handleLogin={handleLogin}
         username={username}
@@ -42,7 +41,11 @@ const App = () => {
         password={password}
         setPassword={setPassword}
       />
-
+    </div>
+  ) : (
+    <div>
+      <h2>blogs</h2>
+      <p>{user.name} logged in</p>
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
       ))}
