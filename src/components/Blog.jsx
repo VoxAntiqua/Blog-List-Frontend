@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, showNotification, blogs, setBlogs }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const blogStyle = {
@@ -16,8 +17,16 @@ const Blog = ({ blog }) => {
     setShowDetails(!showDetails)
   }
 
-  const handleLikeButton = blog => {
-    console.log('Liked:', blog)
+  const handleLikeButton = async blog => {
+    try {
+      const updatedBlog = { ...blog, likes: blog.likes + 1 }
+      const newBlog = await blogService.update(blog.id, updatedBlog)
+      setBlogs(blogs.map(b => (b.id !== blog.id ? b : newBlog)))
+      showNotification('Blog liked!')
+    } catch (exception) {
+      showNotification('Blog could not be updated')
+      console.error(exception)
+    }
   }
 
   return (
