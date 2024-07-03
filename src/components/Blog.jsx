@@ -20,9 +20,10 @@ const Blog = ({ blog, showNotification, blogs, setBlogs }) => {
   const handleLikeButton = async blog => {
     try {
       const updatedBlog = { ...blog, likes: blog.likes + 1 }
-      const newBlog = await blogService.update(blog.id, updatedBlog)
-      setBlogs(blogs.map(b => (b.id !== blog.id ? b : newBlog)))
-      showNotification('Blog liked!')
+      await blogService.update(blog.id, updatedBlog)
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs)
+      showNotification(`${blog.title} liked!`)
     } catch (exception) {
       showNotification('Blog could not be updated')
       console.error(exception)
