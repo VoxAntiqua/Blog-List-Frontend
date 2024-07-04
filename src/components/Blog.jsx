@@ -22,7 +22,7 @@ const Blog = ({ blog, showNotification, blogs, setBlogs }) => {
       const updatedBlog = { ...blog, likes: blog.likes + 1 }
       await blogService.update(blog.id, updatedBlog)
       const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs)
+      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
       showNotification(`${blog.title} liked!`)
     } catch (exception) {
       showNotification('Blog could not be updated')
