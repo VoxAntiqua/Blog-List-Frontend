@@ -30,6 +30,20 @@ const Blog = ({ blog, showNotification, blogs, setBlogs }) => {
     }
   }
 
+  const handleRemoveButton = async blog => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog.id)
+        const updatedBlogs = await blogService.getAll()
+        setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
+        showNotification(`${blog.title} deleted`)
+      } catch (exception) {
+        showNotification('Blog could not be deleted')
+        console.error(exception)
+      }
+    }
+  }
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author}{' '}
@@ -43,6 +57,18 @@ const Blog = ({ blog, showNotification, blogs, setBlogs }) => {
           <button onClick={() => handleLikeButton(blog)}>like</button>
         </div>
         <div>{blog.user.name}</div>
+        <button
+          onClick={() => handleRemoveButton(blog)}
+          style={{
+            display:
+              JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
+                .username === blog.user.username
+                ? ''
+                : 'none',
+          }}
+        >
+          remove
+        </button>
       </div>
     </div>
   )
