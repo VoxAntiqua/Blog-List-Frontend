@@ -51,7 +51,10 @@ const Blog = ({ blog, showNotification, blogs, setBlogs }) => {
       <button onClick={handleDetailsButton}>
         {showDetails ? 'hide' : 'view'}
       </button>
-      <div style={{ display: showDetails ? '' : 'none' }}>
+      <div
+        className="blogDetails"
+        style={{ display: showDetails ? '' : 'none' }}
+      >
         <div>{blog.url}</div>
         <div>
           likes {blog.likes}{' '}
