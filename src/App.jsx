@@ -10,6 +10,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService
@@ -67,6 +70,25 @@ const App = () => {
     }
   }
 
+  const handleCreate = async event => {
+    event.preventDefault()
+    try {
+      const newBlog = await blogService.create({
+        title,
+        author,
+        url,
+      })
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
+      showNotification(`new blog ${newBlog.title} by ${newBlog.author} added`)
+    } catch (exception) {
+      showNotification('Blog could not be added')
+    }
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
   return (
     <>
       <Notification message={message} />
@@ -83,9 +105,13 @@ const App = () => {
           </p>
           <Togglable showLabel="create new" hideLabel="cancel">
             <Create
-              blogs={blogs}
-              setBlogs={setBlogs}
-              showNotification={showNotification}
+              handleCreate={handleCreate}
+              title={title}
+              setTitle={setTitle}
+              author={author}
+              setAuthor={setAuthor}
+              url={url}
+              setUrl={setUrl}
             />
           </Togglable>
           {blogs.map(blog => (

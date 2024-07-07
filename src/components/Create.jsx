@@ -1,30 +1,14 @@
-import { useState } from 'react'
-import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Create = ({ blogs, setBlogs, showNotification }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
-  const handleCreate = async event => {
-    event.preventDefault()
-    try {
-      const newBlog = await blogService.create({
-        title,
-        author,
-        url,
-      })
-      setBlogs([...blogs, newBlog])
-      showNotification(`new blog ${newBlog.title} by ${newBlog.author} added`)
-    } catch (exception) {
-      showNotification('Blog could not be added')
-    }
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-  }
-
+const Create = ({
+  title,
+  setTitle,
+  author,
+  setAuthor,
+  url,
+  setUrl,
+  handleCreate,
+}) => {
   return (
     <>
       <h2>create new</h2>
@@ -69,9 +53,13 @@ const Create = ({ blogs, setBlogs, showNotification }) => {
 }
 
 Create.propTypes = {
-  blogs: PropTypes.array.isRequired,
-  setBlogs: PropTypes.func.isRequired,
-  showNotification: PropTypes.func.isRequired,
+  handleCreate: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  author: PropTypes.string.isRequired,
+  setAuthor: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  setUrl: PropTypes.func.isRequired,
 }
 
 export default Create
