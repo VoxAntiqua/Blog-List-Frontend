@@ -64,17 +64,3 @@ describe('<Blog />', () => {
     expect(blogService.update).toHaveBeenCalledTimes(2)
   })
 })
-
-/* 5.13: Blog List Tests, step 1
-Make a test, which checks that the component displaying a blog renders the blog's title and author, but does not render its URL or number of likes by default.
-
-Add CSS classes to the component to help the testing as necessary.
-
-5.14: Blog List Tests, step 2
-Make a test, which checks that the blog's URL and number of likes are shown when the button controlling the shown details has been clicked.
-
-5.15: Blog List Tests, step 3
-Make a test, which ensures that if the like button is clicked twice, the event handler the component received as props is called twice.
-
-5.16: Blog List Tests, step 4
-Make a test for the new blog form. The test should check, that the form calls the event handler it received as props with the right details when a new blog is created. */
