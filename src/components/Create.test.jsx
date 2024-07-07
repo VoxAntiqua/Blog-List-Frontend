@@ -1,30 +1,14 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import Create from './Create'
 import { beforeEach, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
-import blogService from '../services/blogs'
 
 describe('<Create />', () => {
-  const mockShowNotification = vi.fn()
-  const mockSetBlogs = vi.fn()
+  let mockHandleCreate
 
   beforeEach(() => {
-    // Mock the blogService.create method
-    blogService.create = vi.fn().mockResolvedValue({
-      title: 'Test Title',
-      author: 'Test Author',
-      url: 'www.example.com/test',
-      id: '1',
-    })
-
-    // Render the Create component
-    render(
-      <Create
-        blogs={[]}
-        setBlogs={mockSetBlogs}
-        showNotification={mockShowNotification}
-      />
-    )
+    mockHandleCreate = vi.fn()
+    render(<Create handleCreate={mockHandleCreate} />)
   })
 
   test('submitting a new blog calls the event handler with correct details', async () => {
@@ -33,7 +17,6 @@ describe('<Create />', () => {
     const titleInput = screen.getByPlaceholderText('title')
     const authorInput = screen.getByPlaceholderText('author')
     const urlInput = screen.getByPlaceholderText('url')
-
     const submitButton = screen.getByText('create')
 
     await user.type(titleInput, 'Test Title')
@@ -42,17 +25,16 @@ describe('<Create />', () => {
 
     await user.click(submitButton)
 
-    expect(mockSetBlogs.mock.calls).toHaveLength(1)
-    expect(mockSetBlogs.mock.calls[0][0]).toEqual([
-      {
-        title: 'Test Title',
-        author: 'Test Author',
-        url: 'www.example.com/test',
-        id: '1',
-      },
-    ])
-    expect(mockShowNotification).toHaveBeenCalledWith(
-      'new blog Test Title by Test Author added'
-    )
+    await waitFor(() => {
+      // Check that the handleCreate function is called once
+      expect(mockHandleCreate).toHaveBeenCalledTimes(1)
+
+      // Check that the handleCreate function is called with the correct arguments
+      expect(mockHandleCreate).toHaveBeenCalledWith(
+        'Test Title',
+        'Test Author',
+        'www.example.com/test'
+      )
+    })
   })
 })

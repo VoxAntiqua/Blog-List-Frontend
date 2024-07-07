@@ -70,8 +70,7 @@ const App = () => {
     }
   }
 
-  const handleCreate = async event => {
-    event.preventDefault()
+  const handleCreate = async (title, author, url) => {
     try {
       const newBlog = await blogService.create({
         title,
@@ -84,9 +83,6 @@ const App = () => {
     } catch (exception) {
       showNotification('Blog could not be added')
     }
-    setTitle('')
-    setAuthor('')
-    setUrl('')
   }
 
   return (
@@ -104,15 +100,7 @@ const App = () => {
             {user.name} logged in <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable showLabel="create new" hideLabel="cancel">
-            <Create
-              handleCreate={handleCreate}
-              title={title}
-              setTitle={setTitle}
-              author={author}
-              setAuthor={setAuthor}
-              url={url}
-              setUrl={setUrl}
-            />
+            <Create handleCreate={handleCreate} />
           </Togglable>
           {blogs.map(blog => (
             <Blog

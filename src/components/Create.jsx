@@ -1,18 +1,23 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Create = ({
-  title,
-  setTitle,
-  author,
-  setAuthor,
-  url,
-  setUrl,
-  handleCreate,
-}) => {
+const Create = ({ handleCreate }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const handleSubmit = event => {
+    event.preventDefault()
+    handleCreate(title, author, url)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
   return (
     <>
       <h2>create new</h2>
-      <form onSubmit={handleCreate}>
+      <form onSubmit={handleSubmit}>
         <div>
           title:{' '}
           <input
@@ -54,12 +59,6 @@ const Create = ({
 
 Create.propTypes = {
   handleCreate: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  setTitle: PropTypes.func.isRequired,
-  author: PropTypes.string.isRequired,
-  setAuthor: PropTypes.func.isRequired,
-  url: PropTypes.string.isRequired,
-  setUrl: PropTypes.func.isRequired,
 }
 
 export default Create
