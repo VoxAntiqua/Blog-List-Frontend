@@ -40,6 +40,33 @@ const App = () => {
     showNotification('Logged out')
   }
 
+  const handleLikeButton = async blog => {
+    try {
+      const updatedBlog = { ...blog, likes: blog.likes + 1 }
+      await blogService.update(blog.id, updatedBlog)
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
+      showNotification(`${blog.title} liked!`)
+    } catch (exception) {
+      showNotification('Blog could not be updated')
+      console.error(exception)
+    }
+  }
+
+  const handleRemoveButton = async blog => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog.id)
+        const updatedBlogs = await blogService.getAll()
+        setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
+        showNotification(`${blog.title} deleted`)
+      } catch (exception) {
+        showNotification('Blog could not be deleted')
+        console.error(exception)
+      }
+    }
+  }
+
   return (
     <>
       <Notification message={message} />
@@ -65,9 +92,8 @@ const App = () => {
             <Blog
               key={blog.id}
               blog={blog}
-              showNotification={showNotification}
-              blogs={blogs}
-              setBlogs={setBlogs}
+              handleLikeButton={handleLikeButton}
+              handleRemoveButton={handleRemoveButton}
             />
           ))}
         </div>
