@@ -5,20 +5,19 @@ import Create from './components/Create'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
-
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(blogs => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
+    dispatch(initializeBlogs())
   }, [])
+
+  const blogs = useSelector(state => state.blogs)
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -29,13 +28,6 @@ const App = () => {
     }
   }, [])
 
-  /*   const showNotification = message => {
-    setMessage(message)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  }
- */
   const handleLogout = event => {
     event.preventDefault
     window.localStorage.removeItem('loggedBloglistUser')
@@ -52,7 +44,6 @@ const App = () => {
       dispatch(setNotification(`${blog.title} liked!`, 5))
     } catch (exception) {
       dispatch(setNotification('Blog could not be updated', 5))
-
       console.error(exception)
     }
   }
@@ -111,7 +102,7 @@ const App = () => {
           <Togglable showLabel="create new" hideLabel="cancel">
             <Create handleCreate={handleCreate} />
           </Togglable>
-          {blogs.map(blog => (
+          {sortedBlogs.map(blog => (
             <Blog
               key={blog.id}
               blog={blog}
