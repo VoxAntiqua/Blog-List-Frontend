@@ -35,19 +35,6 @@ const App = () => {
     dispatch(setNotification('Logged out', 5))
   }
 
-  const handleLikeButton = async blog => {
-    try {
-      const updatedBlog = { ...blog, likes: blog.likes + 1 }
-      await blogService.update(blog.id, updatedBlog)
-      const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      dispatch(setNotification(`${blog.title} liked!`, 5))
-    } catch (exception) {
-      dispatch(setNotification('Blog could not be updated', 5))
-      console.error(exception)
-    }
-  }
-
   const handleRemoveButton = async blog => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
@@ -60,26 +47,6 @@ const App = () => {
 
         console.error(exception)
       }
-    }
-  }
-
-  const handleCreate = async (title, author, url) => {
-    try {
-      const newBlog = await blogService.create({
-        title,
-        author,
-        url,
-      })
-      const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      dispatch(
-        setNotification(
-          `new blog ${newBlog.title} by ${newBlog.author} added`,
-          5
-        )
-      )
-    } catch (exception) {
-      dispatch(setNotification('Blog could not be added', 5))
     }
   }
 
@@ -98,13 +65,12 @@ const App = () => {
             {user.name} logged in <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable showLabel="create new" hideLabel="cancel">
-            <Create handleCreate={handleCreate} />
+            <Create />
           </Togglable>
           {sortedBlogs.map(blog => (
             <Blog
               key={blog.id}
               blog={blog}
-              handleLikeButton={handleLikeButton}
               handleRemoveButton={handleRemoveButton}
             />
           ))}
