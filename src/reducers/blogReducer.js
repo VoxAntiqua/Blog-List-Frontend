@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
+import blogs from '../services/blogs'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -23,6 +24,13 @@ export const initializeBlogs = () => {
   return async dispatch => {
     const initialBlogs = await blogService.getAll()
     dispatch(setBlogs(initialBlogs))
+  }
+}
+
+export const createBlog = content => {
+  return async dispatch => {
+    const newBlog = await blogService.create(content)
+    dispatch(appendBlog(newBlog))
   }
 }
 

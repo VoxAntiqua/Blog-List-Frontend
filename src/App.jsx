@@ -54,7 +54,6 @@ const App = () => {
         await blogService.remove(blog.id)
         const updatedBlogs = await blogService.getAll()
         setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-        showNotification(`${blog.title} deleted`)
         dispatch(setNotification(`${blog.title} deleted`, 5))
       } catch (exception) {
         dispatch(setNotification('Blog could not be deleted', 5))
@@ -73,7 +72,6 @@ const App = () => {
       })
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      showNotification(`new blog ${newBlog.title} by ${newBlog.author} added`)
       dispatch(
         setNotification(
           `new blog ${newBlog.title} by ${newBlog.author} added`,

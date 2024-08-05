@@ -1,17 +1,38 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-const Create = ({ handleCreate }) => {
+const Create = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const dispatch = useDispatch()
+
   const handleSubmit = event => {
     event.preventDefault()
-    handleCreate(title, author, url)
+    const content = {
+      title,
+      author,
+      url,
+    }
     setTitle('')
     setAuthor('')
     setUrl('')
+    try {
+      dispatch(createBlog(content))
+      dispatch(
+        setNotification(
+          `new blog ${content.title} by ${content.author} added`,
+          5
+        )
+      )
+    } catch (exception) {
+      dispatch(setNotification('Blog could not be added', 5))
+
+      console.error(exception)
+    }
   }
 
   return (
@@ -55,10 +76,6 @@ const Create = ({ handleCreate }) => {
       </form>
     </>
   )
-}
-
-Create.propTypes = {
-  handleCreate: PropTypes.func.isRequired,
 }
 
 export default Create
