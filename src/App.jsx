@@ -35,21 +35,6 @@ const App = () => {
     dispatch(setNotification('Logged out', 5))
   }
 
-  const handleRemoveButton = async blog => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      try {
-        await blogService.remove(blog.id)
-        const updatedBlogs = await blogService.getAll()
-        setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-        dispatch(setNotification(`${blog.title} deleted`, 5))
-      } catch (exception) {
-        dispatch(setNotification('Blog could not be deleted', 5))
-
-        console.error(exception)
-      }
-    }
-  }
-
   return (
     <>
       <Notification />
@@ -68,11 +53,7 @@ const App = () => {
             <Create />
           </Togglable>
           {sortedBlogs.map(blog => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              handleRemoveButton={handleRemoveButton}
-            />
+            <Blog key={blog.id} blog={blog} />
           ))}
         </div>
       )}

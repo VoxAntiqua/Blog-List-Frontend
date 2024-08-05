@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { likeBlog } from '../reducers/blogReducer'
+import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, handleRemoveButton }) => {
+const Blog = ({ blog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const dispatch = useDispatch()
 
@@ -27,6 +27,16 @@ const Blog = ({ blog, handleRemoveButton }) => {
       dispatch(setNotification(`${blog.title} liked!`, 5))
     } catch (exception) {
       dispatch(setNotification('Blog could not be updated', 5))
+      console.error(exception)
+    }
+  }
+
+  const handleRemoveButton = blog => {
+    try {
+      dispatch(deleteBlog(blog))
+      dispatch(setNotification(`${blog.title} deleted`, 5))
+    } catch (exception) {
+      dispatch(setNotification('Blog could not be deleted', 5))
       console.error(exception)
     }
   }
@@ -72,7 +82,6 @@ const Blog = ({ blog, handleRemoveButton }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleRemoveButton: PropTypes.func.isRequired,
 }
 
 export default Blog
