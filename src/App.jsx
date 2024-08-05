@@ -5,8 +5,11 @@ import Create from './components/Create'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
+  const dispatch = useDispatch()
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
@@ -26,18 +29,18 @@ const App = () => {
     }
   }, [])
 
-  const showNotification = message => {
+  /*   const showNotification = message => {
     setMessage(message)
     setTimeout(() => {
       setMessage(null)
     }, 5000)
   }
-
+ */
   const handleLogout = event => {
     event.preventDefault
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
-    showNotification('Logged out')
+    dispatch(setNotification('Logged out', 5))
   }
 
   const handleLikeButton = async blog => {
@@ -46,9 +49,10 @@ const App = () => {
       await blogService.update(blog.id, updatedBlog)
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      showNotification(`${blog.title} liked!`)
+      dispatch(setNotification(`${blog.title} liked!`, 5))
     } catch (exception) {
-      showNotification('Blog could not be updated')
+      dispatch(setNotification('Blog could not be updated', 5))
+
       console.error(exception)
     }
   }
@@ -60,8 +64,10 @@ const App = () => {
         const updatedBlogs = await blogService.getAll()
         setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
         showNotification(`${blog.title} deleted`)
+        dispatch(setNotification(`${blog.title} deleted`, 5))
       } catch (exception) {
-        showNotification('Blog could not be deleted')
+        dispatch(setNotification('Blog could not be deleted', 5))
+
         console.error(exception)
       }
     }
@@ -77,18 +83,24 @@ const App = () => {
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
       showNotification(`new blog ${newBlog.title} by ${newBlog.author} added`)
+      dispatch(
+        setNotification(
+          `new blog ${newBlog.title} by ${newBlog.author} added`,
+          5
+        )
+      )
     } catch (exception) {
-      showNotification('Blog could not be added')
+      dispatch(setNotification('Blog could not be added', 5))
     }
   }
 
   return (
     <>
-      <Notification message={message} />
+      <Notification />
       {user === null ? (
         <div>
           <h2>log in to application</h2>
-          <Login setUser={setUser} showNotification={showNotification} />
+          <Login setUser={setUser} />
         </div>
       ) : (
         <div>
