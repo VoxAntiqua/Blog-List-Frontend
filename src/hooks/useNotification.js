@@ -2,16 +2,16 @@ import { useContext } from 'react'
 import NotificationContext from '../contexts/NotificationContext'
 
 const useNotification = () => {
-  const { dispatch } = useContext(NotificationContext)
+  const { dispatch: notificationDispatch } = useContext(NotificationContext)
 
   const setNotification = (message, timeout = 5) => {
-    dispatch({
+    notificationDispatch({
       type: 'SET_NOTIFICATION',
       payload: message,
     })
 
     setTimeout(() => {
-      dispatch({
+      notificationDispatch({
         type: 'CLEAR_NOTIFICATION',
       })
     }, timeout * 1000)

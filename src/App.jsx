@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Blog from './components/Blog'
 import Login from './components/Login'
@@ -10,14 +10,14 @@ import useNotification from './hooks/useNotification'
 import UserContext from './contexts/UserContext'
 
 const App = () => {
-  const { user, dispatch } = useContext(UserContext)
+  const { user, dispatch: userDispatch } = useContext(UserContext)
   const { setNotification } = useNotification()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      dispatch({
+      userDispatch({
         type: 'SET_USER',
         payload: user,
       })
@@ -38,7 +38,7 @@ const App = () => {
   const handleLogout = event => {
     event.preventDefault
     window.localStorage.removeItem('loggedBloglistUser')
-    dispatch({
+    userDispatch({
       type: 'LOGOUT',
     })
     setNotification('Logged out', 5)

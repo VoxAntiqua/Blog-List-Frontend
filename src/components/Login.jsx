@@ -8,7 +8,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const { setNotification } = useNotification()
-  const { dispatch } = useContext(UserContext)
+  const { dispatch: userDispatch } = useContext(UserContext)
 
   const handleLogin = async event => {
     event.preventDefault()
@@ -21,7 +21,7 @@ const Login = () => {
 
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      dispatch({
+      userDispatch({
         type: 'SET_USER',
         payload: user,
       })
