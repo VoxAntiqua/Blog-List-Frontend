@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Create from './components/Create'
@@ -8,17 +9,8 @@ import Togglable from './components/Togglable'
 import useNotification from './hooks/useNotification'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-
   const { setNotification } = useNotification()
-
-  useEffect(() => {
-    blogService
-      .getAll()
-      .then(blogs => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-  }, [])
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
@@ -27,6 +19,16 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll,
+  })
+  console.log(JSON.parse(JSON.stringify(result)))
+  if (result.isLoading) {
+    return <div>loading data...</div>
+  }
+  const blogs = result.data
 
   const handleLogout = event => {
     event.preventDefault
