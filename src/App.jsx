@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import Create from './components/Create'
@@ -6,33 +6,31 @@ import blogService from './services/blogs'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
+import { setUser, userLogout } from './reducers/userReducer'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
   useEffect(() => {
     dispatch(initializeBlogs())
-  }, [])
+  }, [dispatch])
 
   const blogs = useSelector(state => state.blogs)
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
   }, [])
 
   const handleLogout = event => {
     event.preventDefault
-    window.localStorage.removeItem('loggedBloglistUser')
-    setUser(null)
-    dispatch(setNotification('Logged out', 5))
+    dispatch(userLogout())
   }
 
   return (
@@ -41,7 +39,7 @@ const App = () => {
       {user === null ? (
         <div>
           <h2>log in to application</h2>
-          <Login setUser={setUser} />
+          <Login />
         </div>
       ) : (
         <div>

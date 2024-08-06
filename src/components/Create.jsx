@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
@@ -9,6 +9,7 @@ const Create = () => {
   const [url, setUrl] = useState('')
 
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -21,7 +22,7 @@ const Create = () => {
     setAuthor('')
     setUrl('')
     try {
-      dispatch(createBlog(content))
+      dispatch(createBlog(content, user))
       dispatch(
         setNotification(
           `new blog ${content.title} by ${content.author} added`,
@@ -30,7 +31,6 @@ const Create = () => {
       )
     } catch (exception) {
       dispatch(setNotification('Blog could not be added', 5))
-
       console.error(exception)
     }
   }
