@@ -5,11 +5,13 @@ import Create from './components/Create'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import useNotification from './hooks/useNotification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
+
+  const { setNotification } = useNotification()
 
   useEffect(() => {
     blogService
@@ -26,18 +28,11 @@ const App = () => {
     }
   }, [])
 
-  const showNotification = message => {
-    setMessage(message)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  }
-
   const handleLogout = event => {
     event.preventDefault
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
-    showNotification('Logged out')
+    setNotification('Logged out', 5)
   }
 
   const handleLikeButton = async blog => {
@@ -46,9 +41,9 @@ const App = () => {
       await blogService.update(blog.id, updatedBlog)
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      showNotification(`${blog.title} liked!`)
+      setNotification(`${blog.title} liked!`, 5)
     } catch (exception) {
-      showNotification('Blog could not be updated')
+      setNotification('Blog could not be updated', 5)
       console.error(exception)
     }
   }
@@ -59,9 +54,9 @@ const App = () => {
         await blogService.remove(blog.id)
         const updatedBlogs = await blogService.getAll()
         setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-        showNotification(`${blog.title} deleted`)
+        setNotification(`${blog.title} deleted`, 5)
       } catch (exception) {
-        showNotification('Blog could not be deleted')
+        setNotification('Blog could not be deleted', 5)
         console.error(exception)
       }
     }
@@ -76,19 +71,19 @@ const App = () => {
       })
       const updatedBlogs = await blogService.getAll()
       setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      showNotification(`new blog ${newBlog.title} by ${newBlog.author} added`)
+      setNotification(`new blog ${newBlog.title} by ${newBlog.author} added`, 5)
     } catch (exception) {
-      showNotification('Blog could not be added')
+      setNotification('Blog could not be added', 5)
     }
   }
 
   return (
     <>
-      <Notification message={message} />
+      <Notification />
       {user === null ? (
         <div>
           <h2>log in to application</h2>
-          <Login setUser={setUser} showNotification={showNotification} />
+          <Login setUser={setUser} />
         </div>
       ) : (
         <div>

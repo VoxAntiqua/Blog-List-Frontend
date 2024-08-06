@@ -2,10 +2,12 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
 import PropTypes from 'prop-types'
+import useNotification from '../hooks/useNotification'
 
-const Login = ({ setUser, showNotification }) => {
+const Login = ({ setUser }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const { setNotification } = useNotification()
 
   const handleLogin = async event => {
     event.preventDefault()
@@ -21,9 +23,9 @@ const Login = ({ setUser, showNotification }) => {
       setUser(user)
       setUsername('')
       setPassword('')
-      showNotification(`Logged in as ${user.name}`)
+      setNotification(`Logged in as ${user.name}`, 5)
     } catch (exception) {
-      showNotification('Wrong username or password')
+      setNotification('Wrong username or password', 5)
     }
   }
 
@@ -54,7 +56,6 @@ const Login = ({ setUser, showNotification }) => {
 
 Login.propTypes = {
   setUser: PropTypes.func.isRequired,
-  showNotification: PropTypes.func.isRequired,
 }
 
 export default Login
