@@ -29,27 +29,13 @@ const App = () => {
   if (result.isLoading) {
     return <div>loading data...</div>
   }
-  const blogs = result.data
+  const blogs = result.data.sort((a, b) => b.likes - a.likes)
 
   const handleLogout = event => {
     event.preventDefault
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
     setNotification('Logged out', 5)
-  }
-
-  const handleRemoveButton = async blog => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      try {
-        await blogService.remove(blog.id)
-        const updatedBlogs = await blogService.getAll()
-        setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-        setNotification(`${blog.title} deleted`, 5)
-      } catch (exception) {
-        setNotification('Blog could not be deleted', 5)
-        console.error(exception)
-      }
-    }
   }
 
   return (
@@ -70,11 +56,7 @@ const App = () => {
             <Create />
           </Togglable>
           {blogs.map(blog => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              handleRemoveButton={handleRemoveButton}
-            />
+            <Blog key={blog.id} blog={blog} />
           ))}
         </div>
       )}

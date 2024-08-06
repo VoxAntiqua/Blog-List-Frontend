@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useNotification from '../hooks/useNotification'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, handleRemoveButton }) => {
+const Blog = ({ blog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const queryClient = useQueryClient()
   const { setNotification } = useNotification()
@@ -21,6 +21,23 @@ const Blog = ({ blog, handleRemoveButton }) => {
 
   const addVote = blog => {
     updateBlogMutation.mutate({ ...blog, likes: blog.likes + 1 })
+  }
+
+  const removeBlogMutation = useMutation({
+    mutationFn: blogService.remove,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      setNotification(`${blog.title} deleted`, 5)
+    },
+    onError: () => {
+      setNotification('Blog could not be deleted', 5)
+    },
+  })
+
+  const handleRemoveButton = blog => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      removeBlogMutation.mutate(blog.id)
+    }
   }
 
   const blogStyle = {
