@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
-import PropTypes from 'prop-types'
 import useNotification from '../hooks/useNotification'
+import UserContext from '../contexts/UserContext'
 
-const Login = ({ setUser }) => {
+const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const { setNotification } = useNotification()
+  const { dispatch } = useContext(UserContext)
 
   const handleLogin = async event => {
     event.preventDefault()
@@ -20,7 +21,10 @@ const Login = ({ setUser }) => {
 
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch({
+        type: 'SET_USER',
+        payload: user,
+      })
       setUsername('')
       setPassword('')
       setNotification(`Logged in as ${user.name}`, 5)
@@ -52,10 +56,6 @@ const Login = ({ setUser }) => {
       <button type="submit">login</button>
     </form>
   )
-}
-
-Login.propTypes = {
-  setUser: PropTypes.func.isRequired,
 }
 
 export default Login
