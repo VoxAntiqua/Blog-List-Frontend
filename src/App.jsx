@@ -23,6 +23,7 @@ const App = () => {
   const result = useQuery({
     queryKey: ['blogs'],
     queryFn: blogService.getAll,
+    refetchOnWindowFocus: false,
   })
   console.log(JSON.parse(JSON.stringify(result)))
   if (result.isLoading) {
@@ -64,21 +65,6 @@ const App = () => {
     }
   }
 
-  const handleCreate = async (title, author, url) => {
-    try {
-      const newBlog = await blogService.create({
-        title,
-        author,
-        url,
-      })
-      const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      setNotification(`new blog ${newBlog.title} by ${newBlog.author} added`, 5)
-    } catch (exception) {
-      setNotification('Blog could not be added', 5)
-    }
-  }
-
   return (
     <>
       <Notification />
@@ -94,7 +80,7 @@ const App = () => {
             {user.name} logged in <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable showLabel="create new" hideLabel="cancel">
-            <Create handleCreate={handleCreate} />
+            <Create />
           </Togglable>
           {blogs.map(blog => (
             <Blog

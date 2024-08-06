@@ -1,14 +1,34 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import blogService from '../services/blogs'
+import useNotification from '../hooks/useNotification'
 import { useState } from 'react'
-import PropTypes from 'prop-types'
 
 const Create = ({ handleCreate }) => {
+  const { setNotification } = useNotification()
+  const queryClient = useQueryClient()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  const mutation = useMutation({
+    mutationFn: async newBlog => {
+      const result = await blogService.create(newBlog)
+      return result
+    },
+    onSuccess: newBlog => {
+      setNotification(`New blog ${newBlog.title} by ${newBlog.author} added`, 5)
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    },
+    onError: error => {
+      setNotification('Blog could not be added', 5)
+      console.error('Error in mutation:', error)
+    },
+  })
+
   const handleSubmit = event => {
     event.preventDefault()
-    handleCreate(title, author, url)
+    mutation.mutate({ title, author, url })
+
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -55,10 +75,6 @@ const Create = ({ handleCreate }) => {
       </form>
     </>
   )
-}
-
-Create.propTypes = {
-  handleCreate: PropTypes.func.isRequired,
 }
 
 export default Create
