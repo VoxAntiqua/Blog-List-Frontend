@@ -3,14 +3,14 @@ import blogService from '../services/blogs'
 import useNotification from '../hooks/useNotification'
 import { useState } from 'react'
 
-const Create = ({ handleCreate }) => {
+const Create = () => {
   const { setNotification } = useNotification()
   const queryClient = useQueryClient()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const mutation = useMutation({
+  const newBlogMutation = useMutation({
     mutationFn: async newBlog => {
       const result = await blogService.create(newBlog)
       return result
@@ -27,7 +27,7 @@ const Create = ({ handleCreate }) => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    mutation.mutate({ title, author, url })
+    newBlogMutation.mutate({ title, author, url })
 
     setTitle('')
     setAuthor('')

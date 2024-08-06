@@ -11,6 +11,7 @@ import useNotification from './hooks/useNotification'
 const App = () => {
   const [user, setUser] = useState(null)
   const { setNotification } = useNotification()
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
@@ -25,7 +26,6 @@ const App = () => {
     queryFn: blogService.getAll,
     refetchOnWindowFocus: false,
   })
-  console.log(JSON.parse(JSON.stringify(result)))
   if (result.isLoading) {
     return <div>loading data...</div>
   }
@@ -36,19 +36,6 @@ const App = () => {
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
     setNotification('Logged out', 5)
-  }
-
-  const handleLikeButton = async blog => {
-    try {
-      const updatedBlog = { ...blog, likes: blog.likes + 1 }
-      await blogService.update(blog.id, updatedBlog)
-      const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      setNotification(`${blog.title} liked!`, 5)
-    } catch (exception) {
-      setNotification('Blog could not be updated', 5)
-      console.error(exception)
-    }
   }
 
   const handleRemoveButton = async blog => {
@@ -86,7 +73,6 @@ const App = () => {
             <Blog
               key={blog.id}
               blog={blog}
-              handleLikeButton={handleLikeButton}
               handleRemoveButton={handleRemoveButton}
             />
           ))}
