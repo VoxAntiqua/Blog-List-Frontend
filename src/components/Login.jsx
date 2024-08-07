@@ -1,15 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { userLogin } from '../reducers/userReducer'
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Image,
-  Message,
-  Segment,
-} from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -46,8 +38,9 @@ const Login = () => {
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
-
-            <button type="submit">login</button>
+            <Button color="blue" fluid size="large" type="submit">
+              submit
+            </Button>
           </Segment>
         </Form>
       </Grid.Column>
