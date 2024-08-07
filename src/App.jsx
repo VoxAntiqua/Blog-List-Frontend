@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import NavBar from './components/NavBar'
 import Blogs from './components/Blogs'
 import BlogDetails from './components/BlogDetails'
 import Login from './components/Login'
@@ -43,12 +44,15 @@ const App = () => {
       ? blogs.find(b => b.id === blogMatch.params.id)
       : null
 
+    const padding = {
+      padding: '5px',
+      display: 'inline-block',
+    }
+
     return (
       <div>
-        <h2>blogs</h2>
-        <p>
-          {user.name} logged in <button onClick={handleLogout}>logout</button>
-        </p>
+        <NavBar />
+        <h2>blog app</h2>
         <Routes>
           <Route path="/" element={<Blogs blogs={sortedBlogs} />} />
           <Route path="/blogs" element={<Blogs blogs={sortedBlogs} />} />
