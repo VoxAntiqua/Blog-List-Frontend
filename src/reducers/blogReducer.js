@@ -22,27 +22,16 @@ const blogSlice = createSlice({
       const id = action.payload
       return state.filter(b => b.id !== id)
     },
-    toggleDetails(state, action) {
-      const id = action.payload
-      const blogToToggle = state.find(b => b.id === id)
-      if (blogToToggle) {
-        blogToToggle.showDetails = !blogToToggle.showDetails
-      }
-    },
   },
 })
 
-export const { addLike, setBlogs, appendBlog, removeBlog, toggleDetails } =
-  blogSlice.actions
+export const { addLike, setBlogs, appendBlog, removeBlog } = blogSlice.actions
 
 export const initializeBlogs = () => {
   return async dispatch => {
     const initialBlogs = await blogService.getAll()
-    const blogsWithShowDetails = initialBlogs.map(blog => ({
-      ...blog,
-      showDetails: false,
-    }))
-    dispatch(setBlogs(blogsWithShowDetails))
+
+    dispatch(setBlogs(initialBlogs))
   }
 }
 

@@ -1,10 +1,8 @@
 import { useEffect } from 'react'
-import Blog from './components/Blog'
+import Blogs from './components/Blogs'
 import BlogDetails from './components/BlogDetails'
 import Login from './components/Login'
-import Create from './components/Create'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
 import { useDispatch, useSelector } from 'react-redux'
@@ -34,17 +32,6 @@ const App = () => {
     dispatch(userLogout())
   }
 
-  const Blogs = () => (
-    <>
-      <Togglable showLabel="create new" hideLabel="cancel">
-        <Create />
-      </Togglable>
-      {sortedBlogs.map(blog => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
-    </>
-  )
-
   const LoggedInView = () => {
     const userMatch = useMatch('/users/:id')
     const userInfo = userMatch
@@ -63,8 +50,8 @@ const App = () => {
           {user.name} logged in <button onClick={handleLogout}>logout</button>
         </p>
         <Routes>
-          <Route path="/" element={<Blogs />} />
-          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/" element={<Blogs blogs={sortedBlogs} />} />
+          <Route path="/blogs" element={<Blogs blogs={sortedBlogs} />} />
           <Route path="/blogs/:id" element={<BlogDetails blog={blogInfo} />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<User userInfo={userInfo} />} />
