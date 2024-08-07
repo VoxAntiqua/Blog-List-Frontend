@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useNavigate } from 'react-router-dom'
+import Comments from './Comments'
 
 const BlogDetails = ({ blog }) => {
   if (!blog) {
@@ -37,9 +38,7 @@ const BlogDetails = ({ blog }) => {
   return (
     <div>
       <h2>
-        <b>
-          {blog.title} {blog.author}
-        </b>
+        {blog.title} {blog.author}
       </h2>
       <div>
         <a href={blog.url}>{blog.url}</a>
@@ -66,60 +65,9 @@ const BlogDetails = ({ blog }) => {
           remove
         </button>
       </div>
+      <Comments blog={blog} />
     </div>
   )
 }
-
-/* const BlogDetails = ({ blog }) => {
-  const dispatch = useDispatch()
-
-  const handleLikeButton = () => {
-    try {
-      dispatch(likeBlog(blog))
-      dispatch(setNotification(`${blog.title} liked!`, 5))
-    } catch (exception) {
-      dispatch(setNotification('Blog could not be updated', 5))
-      console.error(exception)
-    }
-  }
-
-  const handleRemoveButton = () => {
-    try {
-      dispatch(deleteBlog(blog))
-      dispatch(setNotification(`${blog.title} deleted`, 5))
-    } catch (exception) {
-      dispatch(setNotification('Blog could not be deleted', 5))
-      console.error(exception)
-    }
-  }
-
-  if (blog) {
-    return (
-      <div>
-        <div className="blog-url">{blog.url}</div>
-        <div>
-          likes <span className="like-count">{blog.likes}</span>{' '}
-          <button onClick={handleLikeButton} className="like-button">
-            like
-          </button>
-        </div>
-        <div className="blog-user">{blog.user.name}</div>
-        <button
-          onClick={handleRemoveButton}
-          style={{
-            display:
-              JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
-                .username === blog.user.username
-                ? ''
-                : 'none',
-          }}
-          className="remove-button"
-        >
-          remove
-        </button>
-      </div>
-    )
-  }
-} */
 
 export default BlogDetails
