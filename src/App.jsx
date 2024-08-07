@@ -5,10 +5,11 @@ import Create from './components/Create'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import User from './components/User'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { userLogout, initializeUser } from './reducers/userReducer'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import { loadUsers } from './reducers/usersReducer'
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
   const blogs = useSelector(state => state.blogs)
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
 
   useEffect(() => {
     dispatch(initializeUser())
@@ -42,20 +44,24 @@ const App = () => {
     </>
   )
 
-  const LoggedInView = () => (
-    <div>
-      <h2>blogs</h2>
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
-      <Router>
+  const LoggedInView = () => {
+    const match = useMatch('/users/:id')
+    const userInfo = match ? users.find(u => u.id === match.params.id) : null
+
+    return (
+      <div>
+        <h2>blogs</h2>
+        <p>
+          {user.name} logged in <button onClick={handleLogout}>logout</button>
+        </p>
         <Routes>
           <Route path="/" element={<Blogs />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<User userInfo={userInfo} />} />
         </Routes>
-      </Router>
-    </div>
-  )
+      </div>
+    )
+  }
 
   const LoggedOutView = () => (
     <div>
