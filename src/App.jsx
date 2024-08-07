@@ -8,8 +8,8 @@ import Users from './components/Users'
 import User from './components/User'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
-import { userLogout, initializeUser } from './reducers/userReducer'
-import { Routes, Route, Link, useMatch } from 'react-router-dom'
+import { initializeUser } from './reducers/userReducer'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import { loadUsers } from './reducers/usersReducer'
 
 const App = () => {
@@ -28,11 +28,6 @@ const App = () => {
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
 
-  const handleLogout = event => {
-    event.preventDefault
-    dispatch(userLogout())
-  }
-
   const LoggedInView = () => {
     const userMatch = useMatch('/users/:id')
     const userInfo = userMatch
@@ -43,11 +38,6 @@ const App = () => {
     const blogInfo = blogMatch
       ? blogs.find(b => b.id === blogMatch.params.id)
       : null
-
-    const padding = {
-      padding: '5px',
-      display: 'inline-block',
-    }
 
     return (
       <div>
