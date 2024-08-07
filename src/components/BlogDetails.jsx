@@ -22,13 +22,15 @@ const BlogDetails = ({ blog }) => {
   }
 
   const handleRemoveButton = () => {
-    try {
-      dispatch(deleteBlog(blog))
-      dispatch(setNotification(`${blog.title} deleted`, 5))
-      navigate('/')
-    } catch (exception) {
-      dispatch(setNotification('Blog could not be deleted', 5))
-      console.error(exception)
+    if (window.confirm(`Delete ${blog.title}?`)) {
+      try {
+        dispatch(deleteBlog(blog))
+        dispatch(setNotification(`${blog.title} deleted`, 5))
+        navigate('/')
+      } catch (exception) {
+        dispatch(setNotification('Blog could not be deleted', 5))
+        console.error(exception)
+      }
     }
   }
 
