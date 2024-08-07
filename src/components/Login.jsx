@@ -38,7 +38,7 @@ const Login = () => {
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
-            <Button color="blue" fluid size="large" type="submit">
+            <Button color="vk" fluid size="large" type="submit">
               submit
             </Button>
           </Segment>

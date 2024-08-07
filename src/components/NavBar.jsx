@@ -1,15 +1,27 @@
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { userLogout } from '../reducers/userReducer'
+import { Menu, Button, MenuMenu, MenuItem } from 'semantic-ui-react'
 
 const NavBar = () => {
-  const padding = {
-    padding: '5px',
-    display: 'inline-block',
-  }
-
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const [activeItem, setActiveItem] = useState('')
+
+  useEffect(() => {
+    const currentPath = location.pathname
+    if (currentPath === '/' || currentPath.startsWith('/blogs')) {
+      setActiveItem('blogs')
+    } else if (currentPath.startsWith('/users')) {
+      setActiveItem('users')
+    } else {
+      setActiveItem('')
+    }
+  }, [location.pathname])
 
   const handleLogout = event => {
     event.preventDefault
@@ -17,17 +29,33 @@ const NavBar = () => {
   }
 
   return (
-    <div style={{ background: 'LightGray' }}>
-      <Link to="/" style={padding}>
-        blogs
-      </Link>
-      <Link to="/users" style={padding}>
-        users
-      </Link>
-      <span style={padding}>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </span>
-    </div>
+    <Menu pointing>
+      <MenuItem
+        name="blogs"
+        active={activeItem === 'blogs'}
+        onClick={() => {
+          setActiveItem('blogs')
+          navigate('/')
+        }}
+      />
+      <MenuItem
+        name="users"
+        active={activeItem === 'users'}
+        onClick={() => {
+          setActiveItem('users')
+          navigate('/users')
+        }}
+      />
+
+      <MenuMenu position="right">
+        <MenuItem>logged in as {user.name}</MenuItem>
+        <MenuItem>
+          <Button name="logout" onClick={handleLogout} color="vk">
+            logout
+          </Button>
+        </MenuItem>
+      </MenuMenu>
+    </Menu>
   )
 }
 
