@@ -1,10 +1,6 @@
-import { useDispatch } from 'react-redux'
-import { toggleDetails } from '../reducers/blogReducer'
-import BlogDetails from './BlogDetails'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
-  const dispatch = useDispatch()
-
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -13,17 +9,11 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   }
 
-  const toggleDetailsHandler = () => {
-    dispatch(toggleDetails(blog.id))
-  }
-
   return (
     <div style={blogStyle} className="blog">
-      <span className="blog-title">{blog.title}</span> {blog.author}{' '}
-      <button onClick={toggleDetailsHandler} className="toggle-details">
-        {blog.showDetails ? 'hide' : 'view'}
-      </button>
-      {blog.showDetails && <BlogDetails blog={blog} />}
+      <Link to={`/blogs/${blog.id}`}>
+        <span className="blog-title">{blog.title}</span> {blog.author}
+      </Link>
     </div>
   )
 }

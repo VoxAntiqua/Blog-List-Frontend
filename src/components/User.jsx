@@ -1,6 +1,4 @@
 const User = ({ userInfo }) => {
-  console.log(userInfo)
-
   if (!userInfo) {
     return null
   }

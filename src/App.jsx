@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogDetails from './components/BlogDetails'
 import Login from './components/Login'
 import Create from './components/Create'
 import Notification from './components/Notification'
@@ -19,14 +20,14 @@ const App = () => {
     dispatch(loadUsers())
   }, [dispatch])
 
+  useEffect(() => {
+    dispatch(initializeUser())
+  }, [])
+
   const blogs = useSelector(state => state.blogs)
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
-
-  useEffect(() => {
-    dispatch(initializeUser())
-  }, [])
 
   const handleLogout = event => {
     event.preventDefault
@@ -45,8 +46,15 @@ const App = () => {
   )
 
   const LoggedInView = () => {
-    const match = useMatch('/users/:id')
-    const userInfo = match ? users.find(u => u.id === match.params.id) : null
+    const userMatch = useMatch('/users/:id')
+    const userInfo = userMatch
+      ? users.find(u => u.id === userMatch.params.id)
+      : null
+
+    const blogMatch = useMatch('/blogs/:id')
+    const blogInfo = blogMatch
+      ? blogs.find(b => b.id === blogMatch.params.id)
+      : null
 
     return (
       <div>
@@ -56,6 +64,8 @@ const App = () => {
         </p>
         <Routes>
           <Route path="/" element={<Blogs />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs/:id" element={<BlogDetails blog={blogInfo} />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<User userInfo={userInfo} />} />
         </Routes>
