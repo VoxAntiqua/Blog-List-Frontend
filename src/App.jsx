@@ -56,7 +56,6 @@ const App = () => {
 
   const LoggedOutView = () => (
     <div>
-      <h2>log in to application</h2>
       <Login />
     </div>
   )

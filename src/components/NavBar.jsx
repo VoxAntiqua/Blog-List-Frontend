@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { userLogout } from '../reducers/userReducer'
 
 const NavBar = () => {
   const padding = {

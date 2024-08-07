@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { userLogin } from '../reducers/userReducer'
+import {
+  Button,
+  Form,
+  Grid,
+  Header,
+  Image,
+  Message,
+  Segment,
+} from 'semantic-ui-react'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -13,27 +22,36 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="middle">
+      <Grid.Column style={{ maxWidth: 450 }}>
+        <Header as="h2" textAlign="center">
+          log in
+        </Header>
+        <Form size="large" onSubmit={handleLogin}>
+          <Segment stacked>
+            <Form.Input
+              fluid
+              icon="user"
+              iconPosition="left"
+              placeholder="username"
+              value={username}
+              onChange={({ target }) => setUsername(target.value)}
+            />
+            <Form.Input
+              fluid
+              icon="lock"
+              iconPosition="left"
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
+            />
+
+            <button type="submit">login</button>
+          </Segment>
+        </Form>
+      </Grid.Column>
+    </Grid>
   )
 }
 
