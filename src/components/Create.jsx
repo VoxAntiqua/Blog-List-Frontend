@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Divider, Header, FormField, Form, Button } from 'semantic-ui-react'
 
 const Create = () => {
   const [title, setTitle] = useState('')
@@ -38,10 +39,10 @@ const Create = () => {
 
   return (
     <>
-      <h2>create new</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          title:{' '}
+      <Divider />
+      <Header>create new</Header>
+      <Form size="tiny" onSubmit={handleSubmit}>
+        <FormField>
           <input
             type="text"
             value={title}
@@ -50,9 +51,9 @@ const Create = () => {
             placeholder="title"
             onChange={({ target }) => setTitle(target.value)}
           />
-        </div>
-        <div>
-          author:{' '}
+        </FormField>
+
+        <FormField>
           <input
             type="text"
             value={author}
@@ -61,9 +62,8 @@ const Create = () => {
             placeholder="author"
             onChange={({ target }) => setAuthor(target.value)}
           />
-        </div>
-        <div>
-          url:{' '}
+        </FormField>
+        <FormField>
           <input
             type="text"
             value={url}
@@ -72,9 +72,9 @@ const Create = () => {
             placeholder="url"
             onChange={({ target }) => setUrl(target.value)}
           />
-        </div>
-        <button type="submit">create</button>
-      </form>
+        </FormField>
+        <Button type="submit">create</Button>
+      </Form>
     </>
   )
 }

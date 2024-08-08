@@ -25,7 +25,7 @@ const BlogDetails = ({ blog }) => {
     }
   }
 
-  const handleRemoveButton = () => {
+  const handleRemove = () => {
     try {
       dispatch(deleteBlog(blog))
       dispatch(setNotification(`${blog.title} deleted`, 'positive', 5))
@@ -75,7 +75,7 @@ const BlogDetails = ({ blog }) => {
           }}
           onConfirm={() => {
             setConfirmOpen(false)
-            handleRemoveButton()
+            handleRemove()
           }}
         />
       </div>

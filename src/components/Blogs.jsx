@@ -1,13 +1,11 @@
 import Togglable from './Togglable'
 import Create from './Create'
-import { List, ListItem, ListHeader } from 'semantic-ui-react'
+import { List, ListItem, ListHeader, Header } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 const Blogs = ({ blogs }) => (
   <>
-    <Togglable showLabel="create new" hideLabel="cancel">
-      <Create />
-    </Togglable>
+    <Header>blogs</Header>
     <List divided verticalAlign="middle">
       {blogs.map(blog => (
         <ListItem key={blog.id}>
@@ -18,6 +16,9 @@ const Blogs = ({ blogs }) => (
         </ListItem>
       ))}
     </List>
+    <Togglable showLabel="create new" hideLabel="cancel">
+      <Create />
+    </Togglable>
   </>
 )
 
