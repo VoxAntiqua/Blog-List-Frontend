@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+let timeoutId
+
 const initialState = {
   message: '',
   type: '', // 'positive' or 'negative'
@@ -23,9 +25,13 @@ export const { loadNotification, removeNotification } =
 
 export const setNotification = (message, type, duration) => {
   return async dispatch => {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
     dispatch(loadNotification({ message, type }))
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       dispatch(removeNotification())
+      timeoutId = null
     }, duration * 1000)
   }
 }
