@@ -8,10 +8,7 @@ const Blogs = ({ blogs }) => (
     <Togglable showLabel="create new" hideLabel="cancel">
       <Create />
     </Togglable>
-    {/* {blogs.map(blog => (
-      <Blog key={blog.id} blog={blog} />
-    ))} */}
-    <List divided>
+    <List divided verticalAlign="middle">
       {blogs.map(blog => (
         <ListItem key={blog.id}>
           <ListHeader>

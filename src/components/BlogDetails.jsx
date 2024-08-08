@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useNavigate } from 'react-router-dom'
+import { Confirm } from 'semantic-ui-react'
 import Comments from './Comments'
 
 const BlogDetails = ({ blog }) => {
@@ -11,6 +13,7 @@ const BlogDetails = ({ blog }) => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const handleLikeButton = () => {
     try {
@@ -23,15 +26,13 @@ const BlogDetails = ({ blog }) => {
   }
 
   const handleRemoveButton = () => {
-    if (window.confirm(`Delete ${blog.title}?`)) {
-      try {
-        dispatch(deleteBlog(blog))
-        dispatch(setNotification(`${blog.title} deleted`, 'positive', 5))
-        navigate('/')
-      } catch (exception) {
-        dispatch(setNotification('Blog could not be deleted', 'negative', 5))
-        console.error(exception)
-      }
+    try {
+      dispatch(deleteBlog(blog))
+      dispatch(setNotification(`${blog.title} deleted`, 'positive', 5))
+      navigate('/')
+    } catch (exception) {
+      dispatch(setNotification('Blog could not be deleted', 'negative', 5))
+      console.error(exception)
     }
   }
 
@@ -52,7 +53,9 @@ const BlogDetails = ({ blog }) => {
       <div>
         added by {blog.user.name}{' '}
         <button
-          onClick={handleRemoveButton}
+          onClick={() => {
+            setConfirmOpen(true)
+          }}
           style={{
             display:
               JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
@@ -64,6 +67,17 @@ const BlogDetails = ({ blog }) => {
         >
           remove
         </button>
+        <Confirm
+          open={confirmOpen}
+          content={`Are you sure you want to delete ${blog.title}?`}
+          onCancel={() => {
+            setConfirmOpen(false)
+          }}
+          onConfirm={() => {
+            setConfirmOpen(false)
+            handleRemoveButton()
+          }}
+        />
       </div>
       <Comments blog={blog} />
     </div>
