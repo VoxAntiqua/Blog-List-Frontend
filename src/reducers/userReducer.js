@@ -23,9 +23,9 @@ export const userLogin = (username, password) => {
         password,
       })
       dispatch(setUser(user))
-      dispatch(setNotification(`Logged in as ${user.name}`, 5))
+      dispatch(setNotification(`Logged in as ${user.name}`, 'positive', 5))
     } catch (exception) {
-      dispatch(setNotification('Wrong username or password', 5))
+      dispatch(setNotification('Wrong username or password', 'negative', 5))
     }
   }
 }
@@ -34,7 +34,7 @@ export const userLogout = () => {
   return dispatch => {
     handleLogout()
     dispatch(setUser(null))
-    dispatch(setNotification('Logged out', 5))
+    dispatch(setNotification('Logged out', 'positive', 5))
   }
 }
 

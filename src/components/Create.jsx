@@ -26,11 +26,12 @@ const Create = () => {
       dispatch(
         setNotification(
           `new blog ${content.title} by ${content.author} added`,
+          'positive',
           5
         )
       )
     } catch (exception) {
-      dispatch(setNotification('Blog could not be added', 5))
+      dispatch(setNotification('Blog could not be added', 'negative', 5))
       console.error(exception)
     }
   }

@@ -15,9 +15,9 @@ const BlogDetails = ({ blog }) => {
   const handleLikeButton = () => {
     try {
       dispatch(likeBlog(blog))
-      dispatch(setNotification(`${blog.title} liked!`, 5))
+      dispatch(setNotification(`${blog.title} liked!`, 'positive', 5))
     } catch (exception) {
-      dispatch(setNotification('Blog could not be updated', 5))
+      dispatch(setNotification('Blog could not be updated', 'negative', 5))
       console.error(exception)
     }
   }
@@ -26,10 +26,10 @@ const BlogDetails = ({ blog }) => {
     if (window.confirm(`Delete ${blog.title}?`)) {
       try {
         dispatch(deleteBlog(blog))
-        dispatch(setNotification(`${blog.title} deleted`, 5))
+        dispatch(setNotification(`${blog.title} deleted`, 'positive', 5))
         navigate('/')
       } catch (exception) {
-        dispatch(setNotification('Blog could not be deleted', 5))
+        dispatch(setNotification('Blog could not be deleted', 'negative', 5))
         console.error(exception)
       }
     }

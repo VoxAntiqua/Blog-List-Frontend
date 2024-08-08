@@ -41,7 +41,8 @@ const App = () => {
       : null
 
     return (
-      <Container style={{ marginTop: '20px' }}>
+      <Container style={{ marginTop: '60px' }}>
+        <Notification />
         <NavBar />
         <Segment attached stacked>
           <Routes>
@@ -61,16 +62,12 @@ const App = () => {
 
   const LoggedOutView = () => (
     <div>
+      <Notification />
       <Login />
     </div>
   )
 
-  return (
-    <div>
-      <Notification />
-      {user === null ? <LoggedOutView /> : <LoggedInView />}
-    </div>
-  )
+  return <div>{user === null ? <LoggedOutView /> : <LoggedInView />}</div>
 }
 
 export default App
