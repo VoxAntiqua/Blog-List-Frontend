@@ -1,10 +1,8 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { Button } from 'semantic-ui-react'
 
 const Togglable = props => {
   const [visible, setVisible] = useState(false)
-
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -12,13 +10,12 @@ const Togglable = props => {
 
   return (
     <div>
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.showLabel}</button>
-      </div>
-      <div style={showWhenVisible}>
-        {props.children}
-        <button onClick={toggleVisibility}>{props.hideLabel}</button>
-      </div>
+      {!visible && (
+        <Button onClick={toggleVisibility}>{props.showLabel}</Button>
+      )}
+      {visible && (
+        <div>{React.cloneElement(props.children, { toggleVisibility })}</div>
+      )}
     </div>
   )
 }

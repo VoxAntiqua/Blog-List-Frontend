@@ -4,7 +4,7 @@ import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { Divider, Header, FormField, Form, Button } from 'semantic-ui-react'
 
-const Create = () => {
+const Create = ({ toggleVisibility }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -74,6 +74,9 @@ const Create = () => {
           />
         </FormField>
         <Button type="submit">create</Button>
+        <Button type="button" onClick={toggleVisibility}>
+          cancel
+        </Button>
       </Form>
     </>
   )
