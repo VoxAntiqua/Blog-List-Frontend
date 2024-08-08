@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { userLogout } from '../reducers/userReducer'
-import { Menu, Button, MenuMenu, MenuItem } from 'semantic-ui-react'
+import { Menu, Button, MenuMenu, MenuItem, Header } from 'semantic-ui-react'
 
 const NavBar = () => {
   const user = useSelector(state => state.user)
@@ -29,7 +29,10 @@ const NavBar = () => {
   }
 
   return (
-    <Menu pointing>
+    <Menu pointing attached="top">
+      <MenuItem>
+        <Header color="blue">blog app</Header>
+      </MenuItem>
       <MenuItem
         name="blogs"
         active={activeItem === 'blogs'}

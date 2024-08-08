@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux'
+import { Message } from 'semantic-ui-react'
 
 const Notification = () => {
   const notification = useSelector(state => state.notification)
   if (notification) {
-    return <div className="notification">{notification}</div>
+    return <Message>{notification}</Message>
   }
 }
 

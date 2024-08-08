@@ -11,6 +11,7 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import { loadUsers } from './reducers/usersReducer'
+import { Segment, Container } from 'semantic-ui-react'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -40,17 +41,21 @@ const App = () => {
       : null
 
     return (
-      <div>
+      <Container style={{ marginTop: '20px' }}>
         <NavBar />
-        <h2>blog app</h2>
-        <Routes>
-          <Route path="/" element={<Blogs blogs={sortedBlogs} />} />
-          <Route path="/blogs" element={<Blogs blogs={sortedBlogs} />} />
-          <Route path="/blogs/:id" element={<BlogDetails blog={blogInfo} />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/users/:id" element={<User userInfo={userInfo} />} />
-        </Routes>
-      </div>
+        <Segment attached stacked>
+          <Routes>
+            <Route path="/" element={<Blogs blogs={sortedBlogs} />} />
+            <Route path="/blogs" element={<Blogs blogs={sortedBlogs} />} />
+            <Route
+              path="/blogs/:id"
+              element={<BlogDetails blog={blogInfo} />}
+            />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<User userInfo={userInfo} />} />
+          </Routes>
+        </Segment>
+      </Container>
     )
   }
 
