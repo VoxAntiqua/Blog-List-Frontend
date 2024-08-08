@@ -41,7 +41,7 @@ const App = () => {
       : null
 
     return (
-      <Container style={{ marginTop: '60px' }}>
+      <Container style={{ marginTop: '20px' }}>
         <Notification />
         <NavBar />
         <Segment attached stacked>

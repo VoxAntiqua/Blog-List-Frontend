@@ -5,7 +5,7 @@ const Notification = () => {
   const notification = useSelector(state => state.notification)
   if (notification.message) {
     return (
-      <div style={{ height: '60px' }}>
+      <div style={{ height: '40px' }}>
         {' '}
         {/* Ensure consistent height */}
         <Message
@@ -17,7 +17,7 @@ const Notification = () => {
       </div>
     )
   }
-  return <div style={{ height: '60px' }}></div> // Reserve the same space even if no message
+  return <div style={{ height: '40px' }}></div> // Reserve the same space even if no message
 }
 
 export default Notification
