@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { commentOnBlog } from '../reducers/blogReducer'
+import {
+  Header,
+  Form,
+  FormField,
+  Button,
+  List,
+  Divider,
+  ListItem,
+} from 'semantic-ui-react'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Comments = ({ blog }) => {
   const [comment, setComment] = useState('')
@@ -9,29 +19,35 @@ const Comments = ({ blog }) => {
   const handleCommentSubmit = event => {
     event.preventDefault()
     dispatch(commentOnBlog(blog.id, comment))
+    dispatch(setNotification(`new comment ${comment} added`, 'positive', 5))
     setComment('')
   }
 
   return (
     <div>
-      <h3>comments</h3>
-      <form onSubmit={handleCommentSubmit}>
-        <input
-          type="text"
-          value={comment}
-          onChange={({ target }) => setComment(target.value)}
-        />
-        <button type="submit">add comment</button>
-      </form>
+      <Divider />
+      <Header>comments</Header>
+
       {blog.comments.length !== 0 ? (
-        <ul>
+        <List bulleted>
           {blog.comments.map(comment => (
-            <li key={comment._id}>{comment.content}</li>
+            <ListItem key={comment._id}>{comment.content}</ListItem>
           ))}
-        </ul>
+        </List>
       ) : (
         <div>there are no comments yet</div>
       )}
+      <Form onSubmit={handleCommentSubmit}>
+        <FormField>
+          <input
+            type="text"
+            value={comment}
+            onChange={({ target }) => setComment(target.value)}
+            placeholder="add your comment here"
+          />
+        </FormField>
+        <Button type="submit">submit</Button>
+      </Form>
     </div>
   )
 }
