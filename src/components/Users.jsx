@@ -1,32 +1,39 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import {
+  Header,
+  Table,
+  TableRow,
+  TableHeader,
+  TableHeaderCell,
+  TableCell,
+  TableBody,
+} from 'semantic-ui-react'
 
 const Users = () => {
   const users = useSelector(state => state.users)
 
   return (
     <div>
-      <h2>users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>&nbsp;</th>
-            <th>
-              <b>blogs created</b>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+      <Header>users</Header>
+      <Table basic="very" celled collapsing>
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell>&nbsp;</TableHeaderCell>
+            <TableHeaderCell>blogs created</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {users.map(user => (
-            <tr key={user.id}>
-              <td>
+            <TableRow key={user.id}>
+              <TableCell>
                 <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td>{user.blogs.length}</td>
-            </tr>
+              </TableCell>
+              <TableCell>{user.blogs.length}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   )
 }
