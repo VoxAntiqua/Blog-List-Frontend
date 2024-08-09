@@ -1,3 +1,5 @@
+import { Header, HeaderSubheader, List, ListItem } from 'semantic-ui-react'
+
 const User = ({ userInfo }) => {
   if (!userInfo) {
     return null
@@ -5,13 +7,13 @@ const User = ({ userInfo }) => {
 
   return (
     <>
-      <h2>{userInfo.name}</h2>
-      <h3>added blogs</h3>
-      <ul>
+      <Header>{userInfo.name}</Header>
+      <HeaderSubheader>added blogs</HeaderSubheader>
+      <List bulleted>
         {userInfo.blogs.map(blog => (
-          <li key={blog.id}>{blog.title}</li>
+          <ListItem key={blog.id}>{blog.title}</ListItem>
         ))}
-      </ul>
+      </List>
     </>
   )
 }
