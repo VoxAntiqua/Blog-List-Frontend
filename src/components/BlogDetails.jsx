@@ -5,6 +5,7 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useNavigate } from 'react-router-dom'
 import { Confirm } from 'semantic-ui-react'
 import Comments from './Comments'
+import { Header, Button } from 'semantic-ui-react'
 
 const BlogDetails = ({ blog }) => {
   if (!blog) {
@@ -38,35 +39,32 @@ const BlogDetails = ({ blog }) => {
 
   return (
     <div>
-      <h2>
+      <Header>
         {blog.title} {blog.author}
-      </h2>
+      </Header>
       <div>
         <a href={blog.url}>{blog.url}</a>
       </div>
+      <div>added by {blog.user.name} </div>
+      <div>{blog.likes} likes </div>
+
       <div>
-        {blog.likes} likes{' '}
-        <button onClick={handleLikeButton} className="like-button">
+        <Button onClick={handleLikeButton} className="like-button">
           like
-        </button>
-      </div>
-      <div>
-        added by {blog.user.name}{' '}
-        <button
-          onClick={() => {
-            setConfirmOpen(true)
-          }}
-          style={{
-            display:
-              JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
-                .username === blog.user.username
-                ? ''
-                : 'none',
-          }}
-          className="remove-button"
-        >
-          remove
-        </button>
+        </Button>
+        {JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
+          .username === blog.user.username ? (
+          <Button
+            onClick={() => {
+              setConfirmOpen(true)
+            }}
+          >
+            remove
+          </Button>
+        ) : (
+          <Button disabled>remove</Button>
+        )}
+
         <Confirm
           open={confirmOpen}
           content={`Are you sure you want to delete ${blog.title}?`}
